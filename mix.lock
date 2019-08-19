@@ -1,0 +1,4 @@
+%{
+  "elixir_make": {:hex, :elixir_make, "0.6.0", "38349f3e29aff4864352084fc736fa7fa0f2995a819a737554f7ebd28b85aaab", [:mix], [], "hexpm"},
+  "nerves_uart": {:hex, :nerves_uart, "1.2.1", "ae3247e14915f79dde7d4f450ad4c0d4bdc7ab505e3d7c4d4799ac1121e0b505", [:mix], [{:elixir_make, "~> 0.4", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm"},
+}
