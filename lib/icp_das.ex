@@ -3,34 +3,18 @@ defmodule IcpDas do
   Documentation for IcpDas.
   """
 
-  use Bitwise
+  alias IcpDas.Relay
 
-  def set(relay, state) do
+  def on(relay) do
+    Relay.set(relay, 1)
   end
 
-  def get(relay) do
+  def off(relay) do
+    Relay.set(relay, 0)
   end
 
-  def checksum(string) do
-    string
-    |> String.to_charlist
-    |> Enum.sum
-    |> Bitwise.band(255)
-    |> Integer.to_string(16)
+  def state(relay) do
+    Relay.get(relay)
   end
 
-  def command_string(address, cmd) do
-    total = Enum.join([address, cmd], "")
-
-    chk = checksum(total)
-    Enum.join([total, chk,  "\r"], "")
-  end
-
-  def parse(<< "!",  address :: binary-size(2), data :: binary >> = cmd) do
-    IO.inspect data
-  end
-
-  def parse(<< "@", address :: binary-size(2), data :: binary >> = cmd) do
-    IO.inspect data
-  end
 end

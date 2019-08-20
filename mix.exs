@@ -22,6 +22,7 @@ defmodule IcpDas.MixProject do
   defp deps do
     [
       {:nerves_uart, "~> 1.2"},
+      {:toml, "~> 0.5.2"},
     ]
   end
 end
