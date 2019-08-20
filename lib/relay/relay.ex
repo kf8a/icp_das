@@ -3,13 +3,14 @@ defmodule IcpDas.Relay do
 
   def set(relay, state) do
     # look up module relay
-    # get current relay status
-    # OR the bitmask for the relay
-    # send the command
+    # set_dio(module, dio)
+    # |> command_string
+    # |> send()
     # check for reply
   end
 
   def get(relay) do
+
   end
 
   def get_module_status(module) do
@@ -17,19 +18,25 @@ defmodule IcpDas.Relay do
     |> command_string
   end
 
+  def send(cmd) do
+
+  end
+
   def firmware(module) do
     Enum.join(["$", address(module), "F"], "")
     |> command_string
   end
 
+  # iex(38)> Circuits.UART.write(pid, Relay.command_string("#07A000"))
+  # iex(39)> Circuits.UART.write(pid, Relay.command_string("#08A001"))
   def set_dio(module, dio) do
     Enum.join(["#", address(module), "A", Integer.to_string(dio), "01"], "")
-    |> command_string
+    # |> command_string
   end
 
   def clear_dio(module, dio) do
     Enum.join(["#", address(module), "A", Integer.to_string(dio), "00"], "")
-    |> command_string
+    # |> command_string
   end
 
 

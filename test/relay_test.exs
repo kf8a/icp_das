@@ -17,12 +17,20 @@ defmodule RelayTestdo do
     assert Relay.bitmask(4) == "1000"
   end
 
-  test "generates an on command for module 1 DO 1" do
-    assert Relay.set(1,1) == "$01000146"
+  test "generate an on command for module 7 relay 0" do
+    assert Relay.set_dio(7,0) == "#07A001"
   end
 
-  test "generates an off command for module 1 DO 1" do
-    assert Relay.set(1,0) == "$01000045"
+  test "generate an on command for module 6 relay 2" do
+    assert Relay.set_dio(6,2) == "#06A201"
+  end
+
+  test "generate an off command for module 7 relay 0" do
+    assert Relay.clear_dio(7,0) == "#07A000"
+  end
+
+  test "generate an off command for module 6 relay 2" do
+    assert Relay.clear_dio(6,2) == "#06A200"
   end
 
   test "command to get firmware version of module 1" do
