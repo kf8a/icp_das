@@ -13,9 +13,25 @@ defmodule IcpDas.Relay do
   end
 
   def get_module_status(module) do
-    module_string = String.pad_leading(module, 2, "0")
-    Enum.join(["$", module_string, "6"], "")
+    Enum.join(["$", address(module), "6"], "")
+    |> command_string
   end
+
+  def firmware(module) do
+    Enum.join(["$", address(module), "F"], "")
+    |> command_string
+  end
+
+  def set_dio(module, dio) do
+    Enum.join(["#", address(module), "A", Integer.to_string(dio), "01"], "")
+    |> command_string
+  end
+
+  def clear_dio(module, dio) do
+    Enum.join(["#", address(module), "A", Integer.to_string(dio), "00"], "")
+    |> command_string
+  end
+
 
   def bitmask(dio) do
     bin =case dio do
@@ -26,6 +42,12 @@ defmodule IcpDas.Relay do
     end
     Integer.to_string(bin,2)
     |> String.pad_leading(4, "0")
+  end
+
+  def address(module) do
+    module
+    |> Integer.to_string
+    |> String.pad_leading(2, "0")
   end
 
   def checksum(string) do

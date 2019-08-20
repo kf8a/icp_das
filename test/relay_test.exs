@@ -24,4 +24,8 @@ defmodule RelayTestdo do
   test "generates an off command for module 1 DO 1" do
     assert Relay.set(1,0) == "$01000045"
   end
+
+  test "command to get firmware version of module 1" do
+    assert Relay.firmware(1) == "$01FCB"
+  end
 end
