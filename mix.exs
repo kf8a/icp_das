@@ -21,7 +21,7 @@ defmodule IcpDas.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:nerves_uart, "~> 1.2"},
+      {:circuits_uart, "~> 1.3"},
       {:toml, "~> 0.5.2"},
     ]
   end
