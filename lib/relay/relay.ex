@@ -72,7 +72,6 @@ defmodule IcpDas.Relay do
     Enum.join([cmd, chk], "")
   end
 
-
   def parse(<< "!",  address :: binary-size(2), data :: binary >> = cmd) do
     IO.inspect data
   end

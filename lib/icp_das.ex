@@ -54,8 +54,10 @@ defmodule IcpDas do
         relays
         |> Relay.set(1)
         |> write_serial(state[:uart])
-        |> read_serial(state[:uart])
+
+        read_serial(state[:uart])
       _ -> {:error}
+    end
 
     {:noreply, state}
   end
@@ -66,8 +68,10 @@ defmodule IcpDas do
         relays
         |> Relay.set(0)
         |> write_serial(state[:uart])
-        |> read_serial(state[:uart])
+
+        read_serial(state[:uart])
       _ -> {:error}
+    end
 
     {:noreply, state}
   end
