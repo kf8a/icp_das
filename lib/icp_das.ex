@@ -6,6 +6,10 @@ defmodule IcpDas do
   alias IcpDas.Relay
   use GenServer
 
+  def start_link() do
+    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+  end
+
   def init(_) do
     {:ok, uart} = Circuits.UART.start_link
     {:ok, %{uart: uart}, {:continue, :load_relay_mapping}}
