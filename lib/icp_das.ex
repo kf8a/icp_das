@@ -27,9 +27,10 @@ defmodule IcpDas do
     {1,2} |> Relay.get(relay)
   end
 
-  defp lookup(_relay) do
-    {1,2}
+  def lookup(relay, relays) do
+    relays[relay]
   end
+
 
   def write_serial(cmd, pid) do
     Circuits.UART.write(pid, cmd)
@@ -49,6 +50,7 @@ defmodule IcpDas do
     lookup(relay)
     |> Relay.set(1)
     |> write_serial(state[:uart])
+
     {:noreply, state}
   end
 
