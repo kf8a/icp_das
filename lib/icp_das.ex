@@ -29,7 +29,7 @@ defmodule IcpDas do
   end
 
   def lookup(relay, relays) do
-    relays[relay]
+    Map.fetch(relays,relay)
   end
 
 
@@ -49,17 +49,26 @@ defmodule IcpDas do
   end
 
   def handle_cast({:on, relay}, state) do
-    lookup(relay, state["relay"])
-    |> Relay.set(1)
-    |> write_serial(state[:uart])
+    case lookup(relay, state["relay"]) do
+      {:ok, relays} ->
+        relays
+        |> Relay.set(1)
+        |> write_serial(state[:uart])
+        |> read_serial(state[:uart])
+      _ -> {:error}
 
     {:noreply, state}
   end
 
   def handle_cast({:off, relay}, state) do
-    lookup(relay, state["relay"])
-    |> Relay.set(0)
-    |> write_serial(state[:uart])
+    case lookup(relay, state["relay"]) do
+      {:ok, relays} ->
+        relays
+        |> Relay.set(0)
+        |> write_serial(state[:uart])
+        |> read_serial(state[:uart])
+      _ -> {:error}
+
     {:noreply, state}
   end
 end
