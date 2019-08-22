@@ -32,12 +32,12 @@ defmodule IcpDas.Relay do
   end
 
   def set_dio(module, dio) do
-    Enum.join(["#", address(module), "A1", Integer.to_string(dio), "01"], "")
+    Enum.join(["#", address(module), "1", Integer.to_string(dio), "01"], "")
     # |> command_string
   end
 
   def clear_dio(module, dio) do
-    Enum.join(["#", address(module), "A1", Integer.to_string(dio), "00"], "")
+    Enum.join(["#", address(module), "1", Integer.to_string(dio), "00"], "")
     # |> command_string
   end
 
