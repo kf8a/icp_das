@@ -2,144 +2,144 @@
 
   [relay.1]
   module = 8
-  relay = 1
+  relay = 0
 
   [relay.2]
   module = 2
-  relay = 1
+  relay = 0
 
   [relay.3]
   module = 5
-  relay = 1
+  relay = 0
 
   [relay.4]
   module = 8
-  relay = 2
+  relay = 1
 
   [relay.5]
   module = 2
-  relay = 2
+  relay = 1
 
   [relay.6]
   module = 5
-  relay = 2
+  relay = 1
 
   [relay.7]
   module = 8
-  relay = 3
+  relay = 2
 
   [relay.8]
   module = 2
-  relay = 3
+  relay = 2
 
   [relay.9]
   module = 5
-  relay = 3
+  relay = 2
 
   [relay.10]
   module = 8
-  relay = 4
+  relay = 3
 
   [relay.11]
   module = 2
-  relay = 4
+  relay = 3
 
   [relay.12]
   module = 5
-  relay = 4
+  relay = 3
 
   [relay.13]
   module = 9
-  relay = 1
+  relay = 0
 
   [relay.14]
   module = 3
-  relay = 1
+  relay = 0
 
   [relay.15]
   module = 6
-  relay = 1
+  relay = 0
 
   [relay.16]
   module = 9
-  relay = 2
+  relay = 1
 
   [relay.17]
   module = 3
-  relay = 2
+  relay = 1
 
   [relay.18]
   module = 6
-  relay = 2
+  relay = 1
 
   [relay.19]
   module = 9
-  relay = 3
+  relay = 2
 
   [relay.20]
   module = 3
-  relay = 3
+  relay = 2
 
   [relay.21]
   module = 6
-  relay = 3
+  relay = 2
 
   [relay.22]
   module = 9
-  relay = 4
+  relay = 3
 
   [relay.23]
   module = 3
-  relay = 4
+  relay = 3
 
   [relay.24]
   module = 6
-  relay = 4
+  relay = 3
 
   [relay.25]
   module = 10
-  relay = 1
+  relay = 0
 
   [relay.26]
   module = 4
-  relay = 1
+  relay = 0
 
   [relay.27]
   module = 7
-  relay = 1
+  relay = 0
 
   [relay.28]
   module = 10
-  relay = 2
+  relay = 1
 
   [relay.29]
   module = 4
-  relay = 2
+  relay = 1
 
   [relay.30]
   module = 7
-  relay = 2
+  relay = 1
 
   [relay.31]
   module = 10
-  relay = 3
+  relay = 2
 
   [relay.32]
   module = 4
-  relay = 3
+  relay = 2
 
   [relay.33]
   module = 7
-  relay = 3
+  relay = 2
 
   [relay.34]
   module = 10
-  relay = 4
+  relay = 3
 
   [relay.35]
   module = 4
-  relay = 4
+  relay = 3
 
   [relay.36]
   module = 7
-  relay = 4
+  relay = 3
