@@ -48,7 +48,7 @@ defmodule IcpDas do
   end
 
   def handle_cast({:on, relay}, state) do
-    lookup(relay)
+    lookup(relay, state["relay"])
     |> Relay.set(1)
     |> write_serial(state[:uart])
 
@@ -56,7 +56,7 @@ defmodule IcpDas do
   end
 
   def handle_cast({:off, relay}, state) do
-    lookup(relay)
+    lookup(relay, state["relay"])
     |> Relay.set(0)
     |> write_serial(state[:uart])
     {:noreply, state}
