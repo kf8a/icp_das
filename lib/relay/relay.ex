@@ -10,12 +10,12 @@ defmodule IcpDas.Relay do
 
   end
 
-  def set(%{"module": module, "relay": relay}, 1) do
+  def set(%{"module"i => module, "relay" => relay}, 1) do
     set_dio(module, relay)
     |> command_string
   end
 
-  def set(%{"module": module, "relay": relay}, 0) do
+  def set(%{"module" => module, "relay" => relay}, 0) do
     clear_dio(module, relay)
     |> command_string
   end
@@ -32,22 +32,22 @@ defmodule IcpDas.Relay do
   end
 
   def set_dio(module, dio) do
-    Enum.join(["#", address(module), "A", Integer.to_string(dio), "01"], "")
+    Enum.join(["#", address(module), "A", dio, "01"], "")
     # |> command_string
   end
 
   def clear_dio(module, dio) do
-    Enum.join(["#", address(module), "A", Integer.to_string(dio), "00"], "")
+    Enum.join(["#", address(module), "A", dio, "00"], "")
     # |> command_string
   end
 
 
   def bitmask(dio) do
     bin =case dio do
-      1 -> 1
-      2 -> 2
-      3 -> 4
-      4 -> 8
+      "1" -> 1
+      "2" -> 2
+      "3" -> 4
+      "4" -> 8
     end
     Integer.to_string(bin,2)
     |> String.pad_leading(4, "0")
@@ -55,7 +55,6 @@ defmodule IcpDas.Relay do
 
   def address(module) do
     module
-    |> Integer.to_string
     |> String.pad_leading(2, "0")
   end
 
