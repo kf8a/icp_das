@@ -39,8 +39,8 @@ defmodule IcpDas do
     Circuits.UART.read(pid)
   end
 
-  def handle_call(:load_relay_mapping, state) do
-    {:ok, data} = File.read("relay.yml")
+  def handle_continue(:load_relay_mapping, state) do
+    {:ok, data} = File.read(Path.join(:code.priv_dir(:icp_das), "relay.toml"))
     {:ok, relays} = Toml.decode(data)
     {:noreply, Map.merge(state, relays["relay"])}
   end
