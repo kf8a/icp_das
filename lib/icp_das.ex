@@ -44,6 +44,7 @@ defmodule IcpDas do
   def handle_continue(:load_relay_mapping, state) do
     {:ok, data} = File.read(Path.join(:code.priv_dir(:icp_das), "relay.toml"))
     {:ok, relays} = Toml.decode(data)
+    Circuits.UART.open(pid, "ttyUSB0", speed: 9600, active: false, framing: {Circuits.UART.Framing.Line, separator: "\r"})
     {:noreply, Map.merge(state, relays)}
   end
 
