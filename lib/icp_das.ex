@@ -44,7 +44,7 @@ defmodule IcpDas do
   def handle_continue(:load_relay_mapping, state) do
     {:ok, data} = File.read(Path.join(:code.priv_dir(:icp_das), "relay.toml"))
     {:ok, relays} = Toml.decode(data)
-    {:noreply, Map.merge(state, relays["relay"])}
+    {:noreply, Map.merge(state, relays)}
   end
 
   def handle_cast({:on, relay}, state) do
