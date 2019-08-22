@@ -1,6 +1,7 @@
 defmodule IcpDas do
   @moduledoc """
-  Documentation for IcpDas.
+  Interface with ICP-DAS relays
+
   """
 
   alias IcpDas.Relay

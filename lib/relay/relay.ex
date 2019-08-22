@@ -1,4 +1,9 @@
 defmodule IcpDas.Relay do
+  @moduledoc """
+  Low level command building for interface with ICP-DAS relays
+
+  This creates and parses the command strings that are sent to the devices
+  """
   use Bitwise
 
   def get(module, relay) do
