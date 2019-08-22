@@ -10,12 +10,12 @@ defmodule IcpDas.Relay do
 
   end
 
-  def set(%{"module": module, "relay": relay}, 1) do
+  def set(%{"module" => module, "relay" => relay}, 1) do
     set_dio(module, relay)
     |> command_string
   end
 
-  def set(%{"module": module, "relay": relay}, 0) do
+  def set(%{"module" => module, "relay" => relay}, 0) do
     clear_dio(module, relay)
     |> command_string
   end
