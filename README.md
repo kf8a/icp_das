@@ -1,6 +1,9 @@
 # IcpDas
 
-**TODO: Add description**
+Control ICP-DAS 78000 series relays. Only implements setting relays at this
+point, reading the current state is planned.
+
+http://ftp.icpdas.com/pub/cd/8000cd/napdos/7000/manual/7000dio.pdf
 
 ## Installation
 
