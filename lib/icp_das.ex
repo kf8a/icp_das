@@ -24,7 +24,7 @@ defmodule IcpDas do
     GenServer.cast(pid, {:off, relay})
   end
 
-  def state(relay) do
+  def state(pid, relay) do
     GenServer.call(pid, {:state, relay})
   end
 
@@ -76,7 +76,7 @@ defmodule IcpDas do
     {:noreply, state}
   end
 
-  def handle_call({:state, relay}, state)) do
+  def handle_call({:state, relay}, state) do
 
   end
 end
