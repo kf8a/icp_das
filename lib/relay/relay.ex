@@ -6,10 +6,6 @@ defmodule IcpDas.Relay do
   """
   use Bitwise
 
-  def get(module, relay) do
-    Enum.join(["$", address(module), "6"], "")
-  end
-
   def set(%{"module" => module, "relay" => relay}, 1) do
     set_dio(module, relay)
     |> command_string
@@ -25,6 +21,9 @@ defmodule IcpDas.Relay do
     |> command_string
   end
 
+  def parse_module_status(raw_data) do
+    {:ok, data} = parse(raw_data)
+  end
 
   def firmware(module) do
     Enum.join(["$", address(module), "F"], "")
@@ -33,12 +32,10 @@ defmodule IcpDas.Relay do
 
   def set_dio(module, dio) do
     Enum.join(["#", address(module), "1", Integer.to_string(dio), "01"], "")
-    # |> command_string
   end
 
   def clear_dio(module, dio) do
     Enum.join(["#", address(module), "1", Integer.to_string(dio), "00"], "")
-    # |> command_string
   end
 
 
@@ -87,7 +84,7 @@ defmodule IcpDas.Relay do
     {data, check} = String.split_at(data_and_cs, -2)
 
     IO.inspect data
-    case checksum(">") == check do
+    case checksum(data) == check do
       true -> {:ok, data}
       _ -> {:invalid}
     end
