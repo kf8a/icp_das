@@ -25,7 +25,7 @@ defmodule IcpDas do
   end
 
   def state(relay) do
-    {1,2} |> Relay.get(relay)
+    GenServer.call(pid, {:state, relay})
   end
 
   def lookup(relay, relays) do
@@ -74,5 +74,9 @@ defmodule IcpDas do
     end
 
     {:noreply, state}
+  end
+
+  def handle_call({:state, relay}, state)) do
+
   end
 end

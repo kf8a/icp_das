@@ -7,7 +7,7 @@ defmodule IcpDas.Relay do
   use Bitwise
 
   def get(module, relay) do
-
+    Enum.join(["$", address(module), "6"], "")
   end
 
   def set(%{"module" => module, "relay" => relay}, 1) do
