@@ -78,7 +78,7 @@ defmodule IcpDas do
     {:noreply, state}
   end
 
-  def handle_call({:state, relay}, state) do
+  def handle_call({:state, relay}, _from, state) do
     result = case lookup(relay, state["relay"]) do
       {:ok, relay_tuple} ->
           {module, _dio} = relay_tuple
