@@ -17,7 +17,7 @@ defmodule IcpDas.Relay do
   end
 
   def get_module_status(module) do
-    Enum.join(["$", address(module), "6"], "")
+    Enum.join(["@", address(module), "6"], "")
     |> command_string
   end
 
