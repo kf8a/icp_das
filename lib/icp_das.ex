@@ -78,6 +78,16 @@ defmodule IcpDas do
     {:noreply, state}
   end
 
+  def binmask(dio) do
+    case dio do
+      0 -> 0
+      1 -> 1
+      2 -> 2
+      3 -> 4
+      4 -> 8
+    end
+  end
+
   def handle_call({:state, relay}, _from, state) do
     result = case lookup(relay, state["relay"]) do
       {:ok, relay_tuple} ->
@@ -86,7 +96,10 @@ defmodule IcpDas do
           |> write_serial(state[:uart])
 
         {:ok, data} = read_serial(state[:uart])
-        IO.inspect Relay.parse(data)
+        {:ok, datum} = Relay.parse(data)
+        {:ok, << first, _second >> }  = Base.decode16(datum)
+        IO.inspect first
+
       _ -> {:error}
     end
 
