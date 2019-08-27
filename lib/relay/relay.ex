@@ -83,8 +83,7 @@ defmodule IcpDas.Relay do
   def parse(<< ">", data_and_cs :: binary >> = cmd) do
     {data, check} = String.split_at(data_and_cs, -2)
 
-    IO.inspect data
-    case checksum(data) == check do
+    case checksum(">" <> data) == check do
       true -> {:ok, data}
       _ -> {:invalid}
     end
