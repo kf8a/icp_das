@@ -81,7 +81,7 @@ defmodule IcpDas do
   def handle_call({:state, relay}, _from, state) do
     result = case lookup(relay, state["relay"]) do
       {:ok, relay_tuple} ->
-          {module, _dio} = relay_tuple
+          %{"module" => module, "relay" => dio} = relay_tuple
           Relay.get_module_status(module)
           |> write_serial(state[:uart])
 
