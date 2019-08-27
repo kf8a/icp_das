@@ -22,7 +22,7 @@ defmodule IcpDas.Relay do
   end
 
   def parse_module_status(raw_data) do
-    {:ok, data} = parse(raw_data)
+    parse(raw_data)
   end
 
   def firmware(module) do
@@ -69,18 +69,25 @@ defmodule IcpDas.Relay do
     Enum.join([cmd, chk], "")
   end
 
-  def parse(<< "!",  address :: binary-size(2), data :: binary >> = cmd) do
-    IO.inspect data
+  def parse(<< "!",  address :: binary-size(2), data_and_cs :: binary >> = _cmd) do
+    { data, check } = String.split_at(data_and_cs, -2)
+
+    case checksum("@" <> address <> data) == check do
+      true -> {:ok, data}
+      _ -> {:invalid}
+    end
   end
 
-  def parse(<< "@", address :: binary-size(2), data_and_cs :: binary >> = cmd) do
-    {data, checksum } = String.split_at(data_and_cs, -2)
+  def parse(<< "@", address :: binary-size(2), data_and_cs :: binary >> = _cmd) do
+    { data, check } = String.split_at(data_and_cs, -2)
 
-    IO.inspect data
-
+    case checksum("@" <> address <> data) == check do
+      true -> {:ok, data}
+      _ -> {:invalid}
+    end
   end
 
-  def parse(<< ">", data_and_cs :: binary >> = cmd) do
+  def parse(<< ">", data_and_cs :: binary >> = _cmd) do
     {data, check} = String.split_at(data_and_cs, -2)
 
     case checksum(">" <> data) == check do

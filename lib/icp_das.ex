@@ -55,7 +55,8 @@ defmodule IcpDas do
         |> Relay.set(1)
         |> write_serial(state[:uart])
 
-        read_serial(state[:uart])
+        {:ok, data} = read_serial(state[:uart])
+        IO.inspect Relay.parse(data)
       _ -> {:error}
     end
 
@@ -69,7 +70,8 @@ defmodule IcpDas do
         |> Relay.set(0)
         |> write_serial(state[:uart])
 
-        read_serial(state[:uart])
+        {:ok, data} = read_serial(state[:uart])
+        IO.inspect Relay.parse(data)
       _ -> {:error}
     end
 
@@ -77,6 +79,17 @@ defmodule IcpDas do
   end
 
   def handle_call({:state, relay}, state) do
+    result = case lookup(relay, state["relay"]) do
+      {:ok, relay_tuple} ->
+          {module, _dio} = relay_tuple
+          Relay.get_module_status(module)
+          |> write_serial(state[:uart])
 
+        {:ok, data} = read_serial(state[:uart])
+        IO.inspect Relay.parse(data)
+      _ -> {:error}
+    end
+
+    {:reply, result, state}
   end
 end
