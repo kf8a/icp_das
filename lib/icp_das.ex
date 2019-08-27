@@ -6,6 +6,7 @@ defmodule IcpDas do
 
   alias IcpDas.Relay
   use GenServer
+  use Bitwise
 
   def start_link() do
     GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
@@ -101,6 +102,8 @@ defmodule IcpDas do
         IO.inspect dio
         IO.inspect first
 
+        band(first, 1 <<< dio)
+        |> IO.inspect
       _ -> {:error}
     end
 
