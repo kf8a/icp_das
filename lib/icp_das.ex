@@ -99,11 +99,11 @@ defmodule IcpDas do
         {:ok, data} = read_serial(state[:uart])
         {:ok, datum} = Relay.parse(data)
         {:ok, << first, _second >> }  = Base.decode16(datum)
-        IO.inspect dio
-        IO.inspect first
 
-        band(first, 1 <<< dio)
-        |> IO.inspect
+        case band(first, 1 <<< dio) do
+          0 -> :off
+          _ -> :on
+        end
       _ -> {:error}
     end
 
