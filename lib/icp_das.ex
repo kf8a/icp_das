@@ -56,8 +56,7 @@ defmodule IcpDas do
         |> Relay.set(1)
         |> write_serial(state[:uart])
 
-        {:ok, data} = read_serial(state[:uart])
-        IO.inspect Relay.parse(data)
+        {:ok, _data} = read_serial(state[:uart])
       _ -> {:error}
     end
 
@@ -71,8 +70,7 @@ defmodule IcpDas do
         |> Relay.set(0)
         |> write_serial(state[:uart])
 
-        {:ok, data} = read_serial(state[:uart])
-        IO.inspect Relay.parse(data)
+        {:ok, _data} = read_serial(state[:uart])
       _ -> {:error}
     end
 
