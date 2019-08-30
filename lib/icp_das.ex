@@ -92,7 +92,7 @@ defmodule IcpDas do
   end
 
   def handle_call(:read_module_init, _from, state) do
-    write_serial(state[:uart], "$002")
+    write_serial("$002", state[:uart])
     {:ok, data } = read_serial(state[:uart])
     IO.inspect data
   end
