@@ -29,6 +29,10 @@ defmodule IcpDas do
     GenServer.call(pid, {:state, relay})
   end
 
+  def write_raw(pid, cmd) do
+    GenServer.cast(pid, {:raw_write, cmd})
+  end
+
   def read_module_init(pid) do
     GenServer.call(pid, :read_module_init)
   end
@@ -78,6 +82,12 @@ defmodule IcpDas do
       _ -> {:error}
     end
 
+    {:noreply, state}
+  end
+
+  def handle_cast({:raw_write, cmd}, state) do
+    write_serial(state[:uart], cmd)
+    IO.inspect read_serial(state[:uart])
     {:noreply, state}
   end
 
