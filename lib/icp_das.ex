@@ -86,7 +86,7 @@ defmodule IcpDas do
   end
 
   def handle_cast({:raw_write, cmd}, state) do
-    write_serial(state[:uart], cmd)
+    write_serial(cmd, state[:uart])
     IO.inspect read_serial(state[:uart])
     {:noreply, state}
   end
