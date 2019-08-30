@@ -91,16 +91,6 @@ defmodule IcpDas do
     {:noreply, state}
   end
 
-  def binmask(dio) do
-    case dio do
-      0 -> 0
-      1 -> 1
-      2 -> 2
-      3 -> 4
-      4 -> 8
-    end
-  end
-
   def handle_call(:read_module_init, _from, state) do
     write_serial("$002", state[:uart])
     {:ok, data } = read_serial(state[:uart])

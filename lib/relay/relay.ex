@@ -38,17 +38,6 @@ defmodule IcpDas.Relay do
     Enum.join(["#", address(module), "1", Integer.to_string(dio), "00"], "")
   end
 
-  def bitmask(dio) do
-    bin =case dio do
-      1 -> 1
-      2 -> 2
-      3 -> 4
-      4 -> 8
-    end
-    Integer.to_string(bin,2)
-    |> String.pad_leading(4, "0")
-  end
-
   def address(module) do
     module
     |> Integer.to_string
