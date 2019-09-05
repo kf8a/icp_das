@@ -41,7 +41,7 @@ defmodule IcpDas.Relay do
 
   def address(module) do
     module
-    |> Integer.to_string
+    |> Integer.to_string(16)
     |> String.pad_leading(2, "0")
   end
 
