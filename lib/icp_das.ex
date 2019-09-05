@@ -41,15 +41,6 @@ defmodule IcpDas do
     Map.fetch(relays,relay)
   end
 
-
-  def write_serial(cmd, pid) do
-    Circuits.UART.write(pid, cmd)
-  end
-
-  def read_serial(pid) do
-    Circuits.UART.read(pid)
-  end
-
   def handle_continue(:load_relay_mapping, state) do
     {:ok, data} = File.read(Path.join(:code.priv_dir(:icp_das), "relay.toml"))
     {:ok, relays} = Toml.decode(data)
@@ -116,5 +107,13 @@ defmodule IcpDas do
     end
 
     {:reply, result, state}
+  end
+
+  defp write_serial(cmd, pid) do
+    Circuits.UART.write(pid, cmd)
+  end
+
+  defp read_serial(pid) do
+    Circuits.UART.read(pid)
   end
 end
