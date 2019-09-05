@@ -17,6 +17,9 @@ defmodule IcpDas do
     {:ok, %{uart: uart}, {:continue, :load_relay_mapping}}
   end
 
+  @doc """
+  Turn on a relay
+  """
   def on(pid, relay) do
     GenServer.cast(pid, {:on, relay})
   end

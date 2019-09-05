@@ -5,6 +5,7 @@ defmodule IcpDas.Relay do
   This creates and parses the command strings that are sent to the devices
   """
   use Bitwise
+  require Logger
 
   def set(%{"module" => module, "relay" => relay}, 1) do
     set_dio(module, relay)
@@ -82,5 +83,9 @@ defmodule IcpDas.Relay do
       true -> {:ok, data}
       _ -> {:invalid}
     end
+  end
+
+  def parse(cmd) do
+    Logger.error(["can't parse ", cmd)
   end
 end
