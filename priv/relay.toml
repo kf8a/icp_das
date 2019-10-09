@@ -143,3 +143,20 @@
   [relay.36]
   module = 7
   relay = 3
+
+  [relay.37]
+  module = 11
+  relay = 1
+
+  [relay.38]
+  module = 11
+  relay = 2
+
+  [relay.39]
+  module = 11
+  relay = 3
+
+  [relay.40]
+  module = 11
+  relay = 4
+
