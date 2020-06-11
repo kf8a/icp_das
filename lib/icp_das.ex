@@ -8,13 +8,13 @@ defmodule IcpDas do
   use GenServer
   use Bitwise
 
-  def start_link() do
-    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+  def start_link(port) do
+    GenServer.start_link(__MODULE__, %{port: port}, name: __MODULE__)
   end
 
-  def init(_) do
+  def init(state) do
     {:ok, uart} = Circuits.UART.start_link
-    {:ok, %{uart: uart}, {:continue, :load_relay_mapping}}
+    {:ok, %{uart: uart, port: state[:port]}, {:continue, :load_relay_mapping}}
   end
 
   @doc """
@@ -47,7 +47,7 @@ defmodule IcpDas do
   def handle_continue(:load_relay_mapping, state) do
     {:ok, data} = File.read(Path.join(:code.priv_dir(:icp_das), "relay.toml"))
     {:ok, relays} = Toml.decode(data)
-    Circuits.UART.open(state[:uart], "ttyUSB0", speed: 9600, active: false, framing: {Circuits.UART.Framing.Line, separator: "\r"})
+    Circuits.UART.open(state[:uart], state[:port], speed: 9600, active: false, framing: {Circuits.UART.Framing.Line, separator: "\r"})
     {:noreply, Map.merge(state, relays)}
   end
 
