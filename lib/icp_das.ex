@@ -8,13 +8,13 @@ defmodule IcpDas do
   use GenServer
   use Bitwise
 
-  def start_link(port \\ "") do
+  def start_link(port) do
     GenServer.start_link(__MODULE__, %{port: port}, name: __MODULE__)
   end
 
   def init(state) do
     {:ok, uart} = Circuits.UART.start_link
-    {:ok, %{uart: uart, port: state:[port]}, {:continue, :load_relay_mapping}}
+    {:ok, %{uart: uart, port: state[:port]}, {:continue, :load_relay_mapping}}
   end
 
   @doc """
