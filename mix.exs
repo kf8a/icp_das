@@ -22,7 +22,7 @@ defmodule IcpDas.MixProject do
   defp deps do
     [
       {:circuits_uart, "~> 1.3"},
-      {:toml, "~> 0.5.2"},
+      {:toml, "~> 0.6.2"},
     ]
   end
 end
