@@ -40,6 +40,10 @@ defmodule IcpDas do
     GenServer.call(pid, :read_module_init)
   end
 
+  def list_relays(pid) do
+    GenServer.call(pid, :list_relays)
+  end
+
   def lookup(relay, relays) do
     Map.fetch(relays,relay)
   end
@@ -110,6 +114,10 @@ defmodule IcpDas do
     end
 
     {:reply, result, state}
+  end
+
+  def handle_call(:list_relays, _from, state) do
+    {:reply, Map.keys(state["relay"]), state}
   end
 
   defp write_serial(cmd, pid) do
