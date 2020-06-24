@@ -24,13 +24,31 @@ defmodule IcpDas do
     GenServer.cast(pid, {:on, relay})
   end
 
+  @doc """
+  Turn off a relay
+  """
   def off(pid, relay) do
-    GenServer.cast(pid, {:off, relay})
+    relay_string = normalize_relay(relay)
+
+    GenServer.cast(pid, {:off, relay_string})
   end
 
+  @doc """
+  Returns the state of a relay
+  """
   def state(pid, relay) do
-    GenServer.call(pid, {:state, relay})
+    relay_string = normalize_relay(relay)
+
+    GenServer.call(pid, {:state, relay_string})
   end
+
+  @doc """
+  List the configured relays
+  """
+  def list_relays(pid) do
+    GenServer.call(pid, :list_relays)
+  end
+
 
   def write_raw(pid, cmd) do
     GenServer.cast(pid, {:raw_write, cmd})
@@ -40,13 +58,12 @@ defmodule IcpDas do
     GenServer.call(pid, :read_module_init)
   end
 
-  def list_relays(pid) do
-    GenServer.call(pid, :list_relays)
-  end
-
   def lookup(relay, relays) do
     Map.fetch(relays,relay)
   end
+
+  defp normalize_relay(relay) when is_integer(relay), do: to_string(relay)
+  defp normalize_relay(relay),  do: relay
 
   def handle_continue(:load_relay_mapping, state) do
     {:ok, data} = File.read(Path.join(:code.priv_dir(:icp_das), "relay.toml"))
