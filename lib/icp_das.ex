@@ -21,7 +21,9 @@ defmodule IcpDas do
   Turn on a relay
   """
   def on(pid, relay) do
-    GenServer.cast(pid, {:on, relay})
+    relay_string = normalize_relay(relay)
+
+    GenServer.cast(pid, {:on, relay_string})
   end
 
   @doc """
@@ -49,7 +51,6 @@ defmodule IcpDas do
     GenServer.call(pid, :list_relays)
   end
 
-
   def write_raw(pid, cmd) do
     GenServer.cast(pid, {:raw_write, cmd})
   end
@@ -58,7 +59,7 @@ defmodule IcpDas do
     GenServer.call(pid, :read_module_init)
   end
 
-  def lookup(relay, relays) do
+  defp lookup(relay, relays) do
     Map.fetch(relays,relay)
   end
 
