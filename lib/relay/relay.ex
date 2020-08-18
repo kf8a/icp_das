@@ -9,7 +9,7 @@ defmodule IcpDas.Relay do
 
   @doc """
   Generate a string to energize the relay by passing a 1 as the second parameter
-  ""
+  """
   def set(%{"module" => module, "relay" => relay}, 1) do
     set_dio(module, relay)
     |> command_string
