@@ -7,16 +7,25 @@ defmodule IcpDas.Relay do
   use Bitwise
   require Logger
 
+  @doc """
+  Generate a string to energize the relay by passing a 1 as the second parameter
+  ""
   def set(%{"module" => module, "relay" => relay}, 1) do
     set_dio(module, relay)
     |> command_string
   end
 
+  @doc """
+  Generate a string to De-energize the relay by passing a zero as the second parameter
+  """
   def set(%{"module" => module, "relay" => relay}, 0) do
     clear_dio(module, relay)
     |> command_string
   end
 
+  @doc """
+  Generate a string to get the module status
+  """
   def get_module_status(module) do
     Enum.join(["@", address(module)], "")
     |> command_string
