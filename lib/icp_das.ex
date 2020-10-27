@@ -178,12 +178,17 @@ defmodule IcpDas do
           |> write_serial(state[:uart])
 
         {:ok, data} = read_serial(state[:uart])
-        {:ok, datum} = Relay.parse(data)
-        {:ok, << first, _second >> }  = Base.decode16(datum)
+        case Relay.parse(data) do
+          {:ok, datum} ->
+            {:ok, << first, _second >> }  = Base.decode16(datum)
 
-        case band(first, 1 <<< dio) do
-          0 -> :off
-          _ -> :on
+            case band(first, 1 <<< dio) do
+              0 -> :off
+              _ -> :on
+            end
+          {:invalid} ->
+              Logger.error "Relay parse failure #{inspect data}"
+              {:error}
         end
       _ -> {:error}
     end
