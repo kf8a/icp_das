@@ -5,7 +5,7 @@ defmodule IcpDas do
   Provides a way to address a series of ICP-DAS modules. It expects to recieve a serial port on startup that is used
   to communicate with the ICP-DAS modules. This module uses the `Circuits.Uart` library to do the low level communication.
 
-  Uses a `/private/relay.toml` to provide the mapping between the ICP-DAS module/relay nomenclature and
+  Uses the `/private/relay.toml` file to provide the mapping between the ICP-DAS module/relay nomenclature and
   an integer, to make it simpler to address multiple ICP-DAS modules.
 
   """
