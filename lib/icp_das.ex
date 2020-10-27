@@ -10,6 +10,8 @@ defmodule IcpDas do
 
   """
 
+  require Logger
+
   alias IcpDas.Relay
   use GenServer
   use Bitwise
