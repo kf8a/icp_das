@@ -136,7 +136,9 @@ defmodule IcpDas do
         |> write_serial(state[:uart])
 
         {:ok, _data} = read_serial(state[:uart])
-      _ -> {:error}
+      _ ->
+        Logger.error "icp_das: unknown relay #{relay}"
+        {:error}
     end
 
     {:noreply, state}
@@ -151,7 +153,9 @@ defmodule IcpDas do
         |> write_serial(state[:uart])
 
         {:ok, _data} = read_serial(state[:uart])
-      _ -> {:error}
+      _ ->
+        Logger.error "icp_das: unknown relay #{relay}"
+        {:error}
     end
 
     {:noreply, state}
@@ -189,10 +193,12 @@ defmodule IcpDas do
               _ -> :on
             end
           {:invalid} ->
-              Logger.error "Relay parse failure #{inspect data}"
+              Logger.error "icp_das: Relay parse failure #{inspect data}"
               {:error}
         end
-      _ -> {:error}
+      _ ->
+        Logger.error "icp_das: unknown relay #{relay}"
+        {:error}
     end
 
     {:reply, result, state}
