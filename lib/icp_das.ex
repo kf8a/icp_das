@@ -189,7 +189,7 @@ defmodule IcpDas do
           :none ->
             state
           _ ->
-            Process.send_after(self(), state[:request], 100)
+            Process.send_after(self(), state[:request], 500)
             Map.put(state, :request, :none)
         end
       {:error, msg} ->
