@@ -34,7 +34,7 @@ defmodule IcpDas do
   @impl true
   def init(state) do
     {:ok, uart} = Circuits.UART.start_link
-    {:ok, %{uart: uart, port: state[:port]}, {:continue, :load_relay_mapping}}
+    {:ok, %{uart: uart, port: state[:port], request: :none}, {:continue, :load_relay_mapping}}
   end
 
   @doc """
@@ -103,7 +103,6 @@ defmodule IcpDas do
     GenServer.call(pid, :list_relays)
   end
 
-
   defp write_raw(pid, cmd) do
     GenServer.cast(pid, {:raw_write, cmd})
   end
@@ -129,50 +128,83 @@ defmodule IcpDas do
 
   @impl true
   def handle_cast({:on, relay}, state) do
-    case lookup(relay, state["relay"]) do
+    new_state = case lookup(relay, state["relay"]) do
       {:ok, relays} ->
         relays
         |> Relay.set(1)
         |> write_serial(state[:uart])
 
-        {:ok, _data} = read_serial(state[:uart])
+        case read_serial(state[:uart], "on") do
+          :ok ->
+            state
+          {:error, _msg} ->
+            Process.send_after(self(), :reconnect, 100)
+            Map.put(state, :request, {:on, relay})
+        end
+
       _ ->
         Logger.error "icp_das: unknown relay #{relay}"
-        {:error}
+        state
     end
 
-    {:noreply, state}
+    {:noreply, new_state}
   end
 
   @impl true
   def handle_cast({:off, relay}, state) do
-    case lookup(relay, state["relay"]) do
+    new_state = case lookup(relay, state["relay"]) do
       {:ok, relays} ->
         relays
         |> Relay.set(0)
         |> write_serial(state[:uart])
 
-        {:ok, _data} = read_serial(state[:uart])
+        case read_serial(state[:uart], "off") do
+          :ok ->
+            state
+          {:error, _msg} ->
+            Process.send_after(self(), :reconnect, 100)
+            Map.put(state, :request, {:off, relay})
+        end
+
       _ ->
         Logger.error "icp_das: unknown relay #{relay}"
-        {:error}
+        state
     end
 
-    {:noreply, state}
+    {:noreply, new_state}
   end
 
   @impl true
   def handle_cast({:raw_write, cmd}, state) do
     write_serial(cmd, state[:uart])
-    IO.inspect read_serial(state[:uart])
     {:noreply, state}
+  end
+
+  def handle_cast(:reconnect, state) do
+    :ok = Circuits.UART.close(state[:uart])
+    new_state = case Circuits.UART.open(state[:uart], state[:port], speed: 9600, active: false, framing: {Circuits.UART.Framing.Line, separator: "\r"}) do
+      :ok ->
+        # re cast the original data request that failed
+        case state[:request] do
+          :none ->
+            state
+          _ ->
+            Process.send_after(self(), state[:request], 100)
+            Map.put(state, :request, :none)
+        end
+      {:error, msg} ->
+        Logger.error "icp_das: reconnect error: #{inspect msg}"
+        Process.send_after(self(), :reconnect, 100)
+        state
+    end
+    {:noreply, new_state}
   end
 
   @impl true
   def handle_call(:read_module_init, _from, state) do
     write_serial("$002", state[:uart])
-    {:ok, data } = read_serial(state[:uart])
-    IO.inspect data
+    result = read_serial(state[:uart], "init")
+    {:reply, result, state}
   end
 
   @impl true
@@ -183,22 +215,11 @@ defmodule IcpDas do
           Relay.get_module_status(module)
           |> write_serial(state[:uart])
 
-        {:ok, data} = read_serial(state[:uart])
-        case Relay.parse(data) do
-          {:ok, datum} ->
-            {:ok, << first, _second >> }  = Base.decode16(datum)
-
-            case band(first, 1 <<< dio) do
-              0 -> :off
-              _ -> :on
-            end
-          {:invalid} ->
-              Logger.error "icp_das: Relay parse failure #{inspect data}"
-              {:error}
-        end
+          data = read_serial(state[:uart], "state")
+          parse(data, dio)
       _ ->
         Logger.error "icp_das: unknown relay #{relay}"
-        {:error}
+        {:error, "icp_das: unknown relay #{relay}"}
     end
 
     {:reply, result, state}
@@ -213,7 +234,29 @@ defmodule IcpDas do
     Circuits.UART.write(pid, cmd)
   end
 
-  defp read_serial(pid) do
-    Circuits.UART.read(pid)
+  defp read_serial(pid, operation_name) do
+    case Circuits.UART.read(pid) do
+      {:ok, datum} ->
+        datum
+      {:error, msg} ->
+        Logger.error "icp_das #{operation_name}: connection error #{inspect msg}"
+        # Process.send_after(self(), :reconnect, 100)
+        {:error, "icp_das #{operation_name}: connection error #{inspect msg}"}
+    end
+  end
+
+  defp parse(data, dio) do
+    case Relay.parse(data) do
+      {:ok, datum} ->
+        {:ok, << first, _second >> }  = Base.decode16(datum)
+
+        case band(first, 1 <<< dio) do
+          0 -> :off
+          _ -> :on
+        end
+      {:invalid} ->
+        Logger.error "icp_das: Relay parse failure #{inspect data}"
+        {:error, "icp_das: Relay parse failure #{inspect data}" }
+    end
   end
 end
