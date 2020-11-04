@@ -135,11 +135,11 @@ defmodule IcpDas do
         |> write_serial(state[:uart])
 
         case read_serial(state[:uart], "on") do
-          :ok ->
-            state
           {:error, _msg} ->
             Process.send_after(self(), :reconnect, 100)
             Map.put(state, :request, {:on, relay})
+          _ ->
+            state
         end
 
       _ ->
@@ -159,11 +159,11 @@ defmodule IcpDas do
         |> write_serial(state[:uart])
 
         case read_serial(state[:uart], "off") do
-          :ok ->
-            state
           {:error, _msg} ->
             Process.send_after(self(), :reconnect, 100)
             Map.put(state, :request, {:off, relay})
+          _ ->
+            state
         end
 
       _ ->
