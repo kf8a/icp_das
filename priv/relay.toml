@@ -146,17 +146,17 @@
 
   [relay.37]
   module = 11
-  relay = 1
+  relay = 0
 
   [relay.38]
   module = 11
-  relay = 2
+  relay = 1
 
   [relay.39]
   module = 11
-  relay = 3
+  relay = 2
 
   [relay.40]
   module = 11
-  relay = 4
+  relay = 3
 
