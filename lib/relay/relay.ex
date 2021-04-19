@@ -96,5 +96,6 @@ defmodule IcpDas.Relay do
 
   def parse(cmd) do
     Logger.error(["can't parse ", cmd])
+    {:invalid}
   end
 end
