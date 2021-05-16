@@ -112,7 +112,7 @@ defmodule IcpDas do
   end
 
   defp lookup(relay, relays) do
-    Map.fetch(relays,relay)
+    Map.fetch(relays, relay)
   end
 
   defp normalize_relay(relay) when is_integer(relay), do: to_string(relay)

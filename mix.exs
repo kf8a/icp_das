@@ -24,6 +24,7 @@ defmodule IcpDas.MixProject do
       {:circuits_uart, "~> 1.3"},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:toml, "~> 0.6.2"},
+      {:credo, only: :dev, runtime: false}
     ]
   end
 end

@@ -11,19 +11,19 @@ defmodule RelayTestdo do
   end
 
   test "generate an on command for module 7 relay 0" do
-    assert Relay.set_dio(7,0) == "#071001"
+    assert Relay.set_dio(7, 0) == "#071001"
   end
 
   test "generate an on command for module 6 relay 2" do
-    assert Relay.set_dio(6,2) == "#061201"
+    assert Relay.set_dio(6, 2) == "#061201"
   end
 
   test "generate an off command for module 7 relay 0" do
-    assert Relay.clear_dio(7,0) == "#071000"
+    assert Relay.clear_dio(7, 0) == "#071000"
   end
 
   test "generate an off command for module 6 relay 2" do
-    assert Relay.clear_dio(6,2) == "#061200"
+    assert Relay.clear_dio(6, 2) == "#061200"
   end
 
   test "command to get firmware version of module 1" do

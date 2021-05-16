@@ -68,7 +68,7 @@ defmodule IcpDas.Relay do
   end
 
   def parse(<< "!",  address :: binary-size(2), data_and_cs :: binary >> = _cmd) do
-    { data, check } = String.split_at(data_and_cs, -2)
+    {data, check} = String.split_at(data_and_cs, -2)
 
     case checksum("@" <> address <> data) == check do
       true -> {:ok, data}
@@ -77,7 +77,7 @@ defmodule IcpDas.Relay do
   end
 
   def parse(<< "@", address :: binary-size(2), data_and_cs :: binary >> = _cmd) do
-    { data, check } = String.split_at(data_and_cs, -2)
+    {data, check} = String.split_at(data_and_cs, -2)
 
     case checksum("@" <> address <> data) == check do
       true -> {:ok, data}
