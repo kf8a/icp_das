@@ -23,18 +23,39 @@ defmodule IcpDas do
 
   ## Examples
 
-      iex> {:ok, pid} = IcpDas.start_link('/dev/ttyUSB0')
+      iex> {:ok, pid} = IcpDas.start_link('serial_number')
       {:ok, pid}
 
   """
-  def start_link(port) do
-    GenServer.start_link(__MODULE__, %{port: port}, name: __MODULE__)
+  def start_link(serial_number) do
+    GenServer.start_link(__MODULE__, %{serial_number: serial_number}, name: __MODULE__)
   end
 
   @impl true
   def init(state) do
     {:ok, uart} = Circuits.UART.start_link
-    {:ok, %{uart: uart, port: state[:port], request: :none}, {:continue, :load_relay_mapping}}
+
+    {port, _} = Circuits.Uart.enumerate
+                |> find_port(state[:serial_number])
+
+    new_state = state
+                |> Map.put(:uart, uart)
+                |> Map.put(:request, :none)
+                |> Map.put(:port, port)
+
+    {:ok, new_state, {:continue, :load_relay_mapping}}
+  end
+
+  defp find_port(ports, serial_number) do
+    Enum.find(ports, {"ICP_PORT", ''}, fn({_port, value}) -> correct_port?(value, serial_number) end)
+  end
+
+  defp correct_port?(%{serial_number: number}, serial) do
+    number ==  serial
+  end
+
+  defp correct_port?(%{}, _serial) do
+    false
   end
 
   @doc """
@@ -211,12 +232,12 @@ defmodule IcpDas do
   def handle_call({:state, relay}, _from, state) do
     result = case lookup(relay, state["relay"]) do
       {:ok, relay_tuple} ->
-          %{"module" => module, "relay" => dio} = relay_tuple
-          Relay.get_module_status(module)
-          |> write_serial(state[:uart])
+        %{"module" => module, "relay" => dio} = relay_tuple
+        Relay.get_module_status(module)
+        |> write_serial(state[:uart])
 
-          data = read_serial(state[:uart], "state")
-          parse(data, dio)
+        data = read_serial(state[:uart], "state")
+        parse(data, dio)
       _ ->
         Logger.error "icp_das: unknown relay #{relay}"
         {:error, "icp_das: unknown relay #{relay}"}
@@ -254,7 +275,7 @@ defmodule IcpDas do
           0 -> :off
           _ -> :on
         end
-      {:invalid} ->
+      :invalid ->
         Logger.error "icp_das: Relay parse failure #{inspect data}"
         {:error, "icp_das: Relay parse failure #{inspect data}" }
     end

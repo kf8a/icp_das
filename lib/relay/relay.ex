@@ -9,15 +9,13 @@ defmodule IcpDas.Relay do
 
   @doc """
   Generate a string to energize the relay by passing a 1 as the second parameter
+  or de-energize by passing in 0
   """
   def set(%{"module" => module, "relay" => relay}, 1) do
     set_dio(module, relay)
     |> command_string
   end
 
-  @doc """
-  Generate a string to De-energize the relay by passing a zero as the second parameter
-  """
   def set(%{"module" => module, "relay" => relay}, 0) do
     clear_dio(module, relay)
     |> command_string
@@ -67,12 +65,13 @@ defmodule IcpDas.Relay do
     Enum.join([cmd, chk], "")
   end
 
+  @spec parse(arg ::binary) :: {:ok, binary} | :invalid
   def parse(<< "!",  address :: binary-size(2), data_and_cs :: binary >> = _cmd) do
     {data, check} = String.split_at(data_and_cs, -2)
 
     case checksum("@" <> address <> data) == check do
       true -> {:ok, data}
-      _ -> {:invalid}
+      _ -> :invalid
     end
   end
 
@@ -81,7 +80,7 @@ defmodule IcpDas.Relay do
 
     case checksum("@" <> address <> data) == check do
       true -> {:ok, data}
-      _ -> {:invalid}
+      _ -> :invalid
     end
   end
 
@@ -90,12 +89,12 @@ defmodule IcpDas.Relay do
 
     case checksum(">" <> data) == check do
       true -> {:ok, data}
-      _ -> {:invalid}
+      _ -> :invalid
     end
   end
 
   def parse(cmd) do
     Logger.error(["can't parse ", cmd])
-    {:invalid}
+    :invalid
   end
 end
