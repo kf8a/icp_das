@@ -35,7 +35,7 @@ defmodule IcpDas do
   def init(state) do
     {:ok, uart} = Circuits.UART.start_link
 
-    {port, _} = Circuits.Uart.enumerate
+    {port, _} = Circuits.UART.enumerate
                 |> find_port(state[:serial_number])
 
     new_state = state

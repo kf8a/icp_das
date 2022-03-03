@@ -160,3 +160,22 @@
   module = 11
   relay = 3
 
+  [relay.41]
+  module = 12
+  relay = 0
+
+  [relay.42]
+  module = 12
+  relay = 1
+
+  [relay.43]
+  module = 12
+  relay = 2
+
+  [relay.44]
+  module = 12
+  relay = 3
+
+  [relay.45]
+  module = 12
+  relay = 4
