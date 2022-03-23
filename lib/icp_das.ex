@@ -2,10 +2,13 @@ defmodule IcpDas do
   @moduledoc """
   Interface with ICP-DAS relays.
 
-  Provides a way to address a series of ICP-DAS modules. It expects to recieve a serial port on startup that is used
-  to communicate with the ICP-DAS modules. This module uses the `Circuits.Uart` library to do the low level communication.
+  Provides a way to address a series of ICP-DAS modules. It expects to recieve a
+  the serial_number of a usb serial port on startup that is used
+  to communicate with the ICP-DAS modules.
+  This module uses the `Circuits.Uart` library to do the low level communication.
 
-  Uses the `/private/relay.toml` file to provide the mapping between the ICP-DAS module/relay nomenclature and
+  Uses the `/private/relay.toml` file to provide the mapping
+  between the ICP-DAS module/relay nomenclature and
   an integer, to make it simpler to address multiple ICP-DAS modules.
 
   """
@@ -155,6 +158,8 @@ defmodule IcpDas do
         |> Relay.set(1)
         |> write_serial(state[:uart])
 
+        :telemetry.execute([:relay, :on], %{relay: relay, timestamp: DateTime.utc_now()})
+
         case read_serial(state[:uart], "on") do
           {:error, _msg} ->
             Process.send_after(self(), :reconnect, 100)
@@ -178,6 +183,8 @@ defmodule IcpDas do
         relays
         |> Relay.set(0)
         |> write_serial(state[:uart])
+
+        :telemetry.execute([:relay, :off], %{relay: relay, timestamp: DateTime.utc_now()})
 
         case read_serial(state[:uart], "off") do
           {:error, _msg} ->
@@ -208,6 +215,7 @@ defmodule IcpDas do
         # re cast the original data request that failed
         case state[:request] do
           :none ->
+            :telemetry.execute([:relay, :reconnect], %{timestamp: DateTime.utc_now()})
             state
           _ ->
             Process.send_after(self(), state[:request], 500)
@@ -236,7 +244,9 @@ defmodule IcpDas do
         Relay.get_module_status(module)
         |> write_serial(state[:uart])
 
+        :telemetry.execute([:relay, :check_state], %{timestamp: DateTime.utc_now(), relay: relay, module: module, dio: dio})
         data = read_serial(state[:uart], "state")
+        :telemetry.execute([:relay, :state], %{timestamp: DateTime.utc_now(), relay: relay, module: module, dio: dio, data: data})
         parse(data, dio)
       _ ->
         Logger.error "icp_das: unknown relay #{relay}"
