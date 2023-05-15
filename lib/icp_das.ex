@@ -161,6 +161,7 @@ defmodule IcpDas do
         :telemetry.execute([:relay, :on], %{relay: relay, timestamp: DateTime.utc_now()})
 
         case read_serial(state[:uart], "on") do
+          # TODO push error handling up,
           {:error, _msg} ->
             Process.send_after(self(), :reconnect, 100)
             Map.put(state, :request, {:on, relay})
@@ -188,6 +189,7 @@ defmodule IcpDas do
 
         case read_serial(state[:uart], "off") do
           {:error, _msg} ->
+            # TODO: when to try to reconnect
             Process.send_after(self(), :reconnect, 100)
             Map.put(state, :request, {:off, relay})
           _ ->
@@ -218,7 +220,7 @@ defmodule IcpDas do
             :telemetry.execute([:relay, :reconnect], %{timestamp: DateTime.utc_now()})
             state
           _ ->
-            Process.send_after(self(), state[:request], 500)
+            Process.send_after(self(), state[:request], 200)
             Map.put(state, :request, :none)
         end
       {:error, msg} ->
