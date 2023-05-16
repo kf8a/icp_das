@@ -268,7 +268,7 @@ defmodule IcpDas do
   end
 
   defp read_serial(pid, operation_name) do
-    case Circuits.UART.read(pid) do
+    case Circuits.UART.read(pid, 1000) do
       {:ok, datum} ->
         datum
       {:error, msg} ->
