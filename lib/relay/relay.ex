@@ -4,7 +4,6 @@ defmodule IcpDas.Relay do
 
   This creates and parses the command strings that are sent to the devices
   """
-  use Bitwise
   require Logger
 
   @doc """
@@ -54,8 +53,8 @@ defmodule IcpDas.Relay do
 
   def checksum(string) do
     string
-    |> String.to_charlist
-    |> Enum.sum
+    |> String.to_charlist()
+    |> Enum.sum()
     |> Bitwise.band(255)
     |> Integer.to_string(16)
   end
@@ -65,8 +64,8 @@ defmodule IcpDas.Relay do
     Enum.join([cmd, chk], "")
   end
 
-  @spec parse(arg ::binary) :: {:ok, binary} | :invalid
-  def parse(<< "!",  address :: binary-size(2), data_and_cs :: binary >> = _cmd) do
+  @spec parse(arg :: binary) :: {:ok, binary} | :invalid
+  def parse(<<"!", address::binary-size(2), data_and_cs::binary>> = _cmd) do
     {data, check} = String.split_at(data_and_cs, -2)
 
     case checksum("@" <> address <> data) == check do
@@ -75,7 +74,7 @@ defmodule IcpDas.Relay do
     end
   end
 
-  def parse(<< "@", address :: binary-size(2), data_and_cs :: binary >> = _cmd) do
+  def parse(<<"@", address::binary-size(2), data_and_cs::binary>> = _cmd) do
     {data, check} = String.split_at(data_and_cs, -2)
 
     case checksum("@" <> address <> data) == check do
@@ -84,7 +83,7 @@ defmodule IcpDas.Relay do
     end
   end
 
-  def parse(<< ">", data_and_cs :: binary >> = _cmd) do
+  def parse(<<">", data_and_cs::binary>> = _cmd) do
     {data, check} = String.split_at(data_and_cs, -2)
 
     case checksum(">" <> data) == check do
