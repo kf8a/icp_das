@@ -11,6 +11,20 @@ defmodule IcpDas do
   between the ICP-DAS module/relay nomenclature and
   an integer, to make it simpler to address multiple ICP-DAS modules.
 
+  The format of the `relay.toml` file is:
+
+  ```toml
+  [relay]
+
+    [relay.1]
+    module = 8
+    relay = 0
+
+    [relay.2]
+    module = 2
+    relay = 0
+  ```
+
   """
 
   require Logger

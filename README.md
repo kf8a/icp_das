@@ -18,6 +18,23 @@ using integers.
 This library uses the `Circuits.Uart` library to handle the actual
 communication.
 
+The format of the `relay.toml` file is:
+
+```toml
+
+[relay]
+
+  [relay.1]
+  module = 8
+  relay = 0
+
+  [relay.2]
+  module = 2
+  relay = 0
+
+  ....
+```
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed

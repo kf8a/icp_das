@@ -7,7 +7,8 @@ defmodule IcpDas.MixProject do
       version: "0.1.0",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      docs: docs()
     ]
   end
 
@@ -26,6 +27,13 @@ defmodule IcpDas.MixProject do
       {:toml, "~> 0.7.0"},
       {:telemetry, "~> 1.0"},
       {:credo, only: :dev, runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "IcpDas",
+      extras: ["README.md"]
     ]
   end
 end
